@@ -23,23 +23,27 @@ public class ProfessorController {
 		professor.setNome(nome);
 		professor.setTitulacao(TitulacaoUtil.definirTitulacao(titulacao));
 		professor.setEndereco(endereco);
-
+		
+		if(professorDao.existe(professor)) {
+			throw new Exception("Professor j√° foi cadastrado!");
+		}
+		
 		if (professorDao.consultar(cpf) == null) {
 			if ((professor.getTitulacao() != Titulacao.DOUTOR) || (professorDao.retornarTotalDoutor() < 1)) {
 				professorDao.inserir(professor);
 				System.out.println("Professor cadastrado com sucesso!");
 			} else {
-				System.out.println("O quadro de Doutores est· cheio!");
+				System.out.println("O quadro de Doutores est√° cheio!");
 			}
 		} else {
-			System.out.println("Professor j· est· cadastrado!");
+			System.out.println("Professor j√° est√° cadastrado!");
 		}
 
 	}
 
 	public List<Professor> retornarTodos() {
 		if (professorDao == null) {
-			System.out.println("N„o h· professores cadastrados");
+			System.out.println("N√£o h√° professores cadastrados");
 			return null;
 		} else {
 			return professorDao.retornarTodos();
@@ -60,7 +64,7 @@ public class ProfessorController {
 		if(professorDao.consultar(cpf) != null) {
 			professorDao.atualizar(cpfAlterado, professor);
 		} else {
-			System.out.println("Esse professor n„o existe para ser modificado");
+			System.out.println("Esse professor n√£o existe para ser modificado");
 		}
 	}
 
@@ -72,7 +76,7 @@ public class ProfessorController {
 		if (professorDao.consultar(cpf) != null) {
 			professorDao.remover(cpf);
 		} else {
-			System.out.println("Professor n„o pode ser removido pois n„o est· cadastrado");
+			System.out.println("Professor n√£o pode ser removido pois n√£o est√° cadastrado");
 		}
 	}
 
